@@ -1,0 +1,7 @@
+.action-bar {
+	justify-content: space-between;
+	display: flex;
+	column-gap: 16px;
+	width: 320px;
+}
+
