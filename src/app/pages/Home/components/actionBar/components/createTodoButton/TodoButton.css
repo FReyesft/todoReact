@@ -4,6 +4,7 @@
 	border-radius: 8px;
 	border: none;
 	color: #fff;
+	cursor: pointer;
 }
 
 .todo-button:hover {

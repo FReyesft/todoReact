@@ -15,6 +15,7 @@
 	height: 50px;
 	align-items: center;
 	column-gap: 16px;
+	user-select: none;
 }
 
 .todo-status-completed {
@@ -28,6 +29,7 @@
 	height: 16px;
 	padding: 4px;
 	background-color: rgb(81, 194, 137);
+	transition: all ease 0.3s;
 }
 
 .todo-status-pending {
@@ -41,4 +43,28 @@
 	height: 16px;
 	padding: 4px;
 	background-color: rgb(223, 81, 81);
+	transition: all ease 0.3s;
+}
+
+.button-delete {
+	font-size: 20px;
+	user-select: none;
+	cursor: pointer;
+	font-weight: bold;
+	padding: 4px;
+}
+
+.button-delete:hover {
+	user-select: none;
+	cursor: pointer;
+	font-weight: bold;
+	color: rgb(223, 81, 81) ;
+}
+
+.todo-status-completed.rotate {
+	transform: rotate(360deg);
+}
+
+.todo-status-pending.rotate {
+	transform: rotate(360deg);
 }
