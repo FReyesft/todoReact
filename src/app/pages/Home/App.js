@@ -1,18 +1,15 @@
-import { ActionBar } from './components/actionBar/ActionBar';
 import './App.css';
-import { TodoCounter } from './components/todoCounter/TodoCounter';
-import { TodoItem } from './components/todoItem/TodoItem';
-import { TodoList } from './components/todoList/TodoList';
 import { useState } from 'react';
+import { TodoCounter } from './components/TodoCounter/TodoCounter';
+import { ActionBar } from './components/ActionBar/ActionBar';
+import { TodoList } from './components/TodoList/TodoList';
+import { TodoItem } from './components/TodoItem/TodoItem';
 import jsConfetti from 'js-confetti';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-const confetti = new jsConfetti(); 
+const confetti = new jsConfetti();
 
 function App() {
-  const defaulTodos = [
-    { text: 'Cortar cebolla', status: false, id: 1 },
-  ]
-  const { todos, saveTodos } = useLocalStorage('todos', defaulTodos);
+  const { todos, saveTodos, loading } = useLocalStorage('todos', []);
   const completedTodos = todos?.filter(t => !!t.status).length;
   const totalTodos = todos?.length;
   const [searchValue, setSearchValue] = useState('');
@@ -26,11 +23,11 @@ function App() {
     const findIndex = newTodos.findIndex(t => t.id === id);
     newTodos[findIndex].status = !newTodos[findIndex].status;
     saveTodos(newTodos);
-    if(newTodos.filter(todo => todo.status).length === totalTodos) {
+    if (newTodos.filter(todo => todo.status).length === totalTodos) {
       confetti.addConfetti({
         emojis: ['😀', '😉', '👌', '😮', '🤩', '😎'],
       })
-    } 
+    }
   }
 
   const deleteTodo = (id) => {
@@ -38,14 +35,16 @@ function App() {
     const findIndex = newTodos.findIndex(t => t.id === id);
     newTodos.splice(findIndex, 1);
     saveTodos(newTodos);
-  } 
+  }
   return (
     <>
       <TodoCounter completed={completedTodos} total={totalTodos} />
       <ActionBar searchValue={searchValue} setSearchValue={setSearchValue} />
       <TodoList>
-        {searchedTodos.map((todoItem) => { //* Cada elemento dentro de un array en react debe tener un Key diferente
-          return <TodoItem key={todoItem.id} text={todoItem.text} status={todoItem.status ? 'Si' : 'No'} onDelete={() => deleteTodo(todoItem.id)} complete={() => completeTodo(todoItem.id)}/>
+        { loading && <p>Cargando...</p> }
+        { !loading && !searchedTodos.length && <p>Agrega nuevos TODOs</p>}
+        { !loading && searchedTodos.map((todoItem) => { //* Cada elemento dentro de un array en react debe tener un Key diferente
+          return <TodoItem key={todoItem.id} text={todoItem.text} status={todoItem.status ? 'Si' : 'No'} onDelete={() => deleteTodo(todoItem.id)} complete={() => completeTodo(todoItem.id)} />
         })}
       </TodoList>
     </>
