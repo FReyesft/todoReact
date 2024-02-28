@@ -1,5 +1,16 @@
-import './TodoButton.css'
+import './TodoButton.css';
+import { useFormContext } from '../../../../../../context/FormContext';
 function TodoCreateButton() {
-  return <button className="todo-button">Nuevo</button>;
+  const { openForm } = useFormContext();
+  const handleClick = () => {
+    openForm();
+  };
+  return (
+    <button
+      className="todo-button"
+      onClick={handleClick}>
+      Nuevo
+    </button>
+  );
 }
 export { TodoCreateButton };
