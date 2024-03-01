@@ -4,13 +4,13 @@ import { TodoCounter } from './components/todoCounter/TodoCounter';
 import { ActionBar } from './components/actionBar/ActionBar';
 import { TodoList } from './components/todoList/TodoList';
 import { TodoItem } from './components/todoItem/TodoItem';
-import jsConfetti from 'js-confetti';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { FormComponent } from '../../shared/TodoForm/TodoForm';
 import { useFormContext } from '../../context/FormContext';
-const confetti = new jsConfetti();
-function App({ children }) {
-  const { todos, saveTodos, loading } = useLocalStorage('todos', []);
+function App() {
+  const { loading } = useLocalStorage('todos', []);
+  const { isFormVisible, completeTodo, todos, deleteTodo } = useFormContext();
+  console.log('todos', todos);
   const completedTodos = todos?.filter(t => !!t.status).length;
   const totalTodos = todos?.length;
   const [searchValue, setSearchValue] = useState('');
@@ -18,25 +18,6 @@ function App({ children }) {
     return todo.text.toLowerCase().includes(searchValue.toLowerCase())
   });
 
-  const { isFormVisible } = useFormContext();
-  const completeTodo = (id) => {
-    const newTodos = [...todos];
-    const findIndex = newTodos.findIndex(t => t.id === id);
-    newTodos[findIndex].status = !newTodos[findIndex].status;
-    saveTodos(newTodos);
-    if (newTodos.filter(todo => todo.status).length === totalTodos) {
-      confetti.addConfetti({
-        emojis: ['😀', '😉', '👌', '😮', '🤩', '😎'],
-      })
-    }
-  }
-
-  const deleteTodo = (id) => {
-    const newTodos = [...todos];
-    const findIndex = newTodos.findIndex(t => t.id === id);
-    newTodos.splice(findIndex, 1);
-    saveTodos(newTodos);
-  }
   return (
     <>
       <TodoCounter completed={completedTodos} total={totalTodos} />
